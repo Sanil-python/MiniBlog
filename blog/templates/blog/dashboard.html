@@ -1,0 +1,51 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block msg %}
+{% if messages %}
+{% for message in messages %}
+<div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible fade show" {% endif %}>
+    <strong>{{message}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock msg %}
+
+{% block content %}
+<div class="coml-10">
+    <h3 class="text-white my-5">DashBoard Page</h3>
+    <a href="{% url 'addblog' %}" class="btn btn-success">Add Blog</a>
+    <h4 class="text-center alert alert-info mt-3">Show Post Information</h4>
+    {% if blogs %}
+    <table class="table table-hover bg-white">
+        <thead>
+            <tr class="text-center">
+                <th scope="col" style="width:2%">ID</th>
+                <th scope="col" style="width:28%">Title</th>
+                <th scope="col" style="width:55%">Description</th>
+                <th scope="col" style="width:15%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for blog in blogs %}
+            <tr>
+                <th scope="row">{{blog.id}}</th>
+                <td>{{blog.title}}</td>
+                <td>{{blog.desc}}</td>
+                <td class="text-center">
+                    <a href="{% url 'updateblog' blog.id%}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{% url 'deleteblog' blog.id %}" method="post" class="d-inline">{% csrf_token %}
+                        <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h4 class="text=center alert alert-warning">No Records</h4>
+    {% endif %}
+</div>
+{% endblock content %}
